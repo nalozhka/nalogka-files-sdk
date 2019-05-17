@@ -1,0 +1,31 @@
+{
+    "name": "fostenslave/nalogka-files-sdk",
+    "description": "Реализация SDK для работы с API файлового хранилища Наложка.рф",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.6",
+        "psr/log": "^1.1"
+    },
+    "authors": [
+        {
+            "name": "Vyacheslav Prudovskiy",
+            "email": "slavec56@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Hitslab",
+            "email": "hitslab@yandex.ru",
+            "role": "Creator"
+        }
+    ],
+    "support": {
+        "email": "slavec56@gmail.com",
+        "issues": "https://bitbucket.org/fostenslave/nalogka-files-sdk/issues"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fostenslave\\NalogkaFilesSDK\\": "src/"
+        }
+    }
+}
