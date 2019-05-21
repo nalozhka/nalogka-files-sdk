@@ -11,6 +11,8 @@ use Fostenslave\NalogkaFilesSDK\Serialization\AbstractSerializationComponent;
 
 class ApiClient
 {
+    const CONTENT_TYPE_JSON = "application/json";
+
     private $baseUrl;
 
     private $parameters;
@@ -39,16 +41,19 @@ class ApiClient
      * @param $method
      * @param $path
      * @param array|string $data
+     * @param array $headers
      * @return array|null|object
-     * @throws NalogkaSdkException
      * @throws ApiErrorException
+     * @throws NalogkaSdkException
      * @throws ServerErrorException
      */
-    public function request($method, $path, $data = [])
+    public function request($method, $path, $data = [], $headers = [])
     {
         $method = strtoupper($method);
 
-        $headers = isset($this->parameters['headers']) ? $this->parameters['headers'] : [];
+        if (isset($this->parameters['headers'])) {
+            $headers = array_merge($this->parameters['headers'], $headers);
+        }
 
         $url = rtrim($this->baseUrl, '/') . '/' . ltrim($path, '/');
 
@@ -64,15 +69,21 @@ class ApiClient
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
             if ($data) {
                 if (is_array($data)) {
-                    $data_string = json_encode($data);
-                    $headers['Content-Type'] = 'application/json';
+                    if (empty($headers['Content-Type'])) {
+                        $headers['Content-Type'] = self::CONTENT_TYPE_JSON;
+                    }
+
+                    if ($headers['Content-Type'] === self::CONTENT_TYPE_JSON) {
+                        $data_string = json_encode($data);
+                    } else {
+                        throw new NalogkaSdkException("Неизвестный content-type данных в запросе: {$headers['Content-Type']}");
+                    }
                 } else {
                     $data_string = $data;
                 }
 
                 $headers['Content-Length'] = strlen($data_string);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-
             }
         }
 

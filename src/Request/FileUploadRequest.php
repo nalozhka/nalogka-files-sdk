@@ -24,9 +24,13 @@ class FileUploadRequest extends AbstractRequest
         return $this;
     }
 
-    public function file($file)
+    public function file($fileContent, $contentType = null)
     {
-        $this->requestData = $file;
+        $this->requestData = $fileContent;
+
+        if ($contentType !== null) {
+            $this->requestHeaders['Content-Type'] = $contentType;
+        }
 
         return $this;
     }
@@ -38,7 +42,7 @@ class FileUploadRequest extends AbstractRequest
 
     protected function getHttpPath()
     {
-        return "/upload?filename={$this->fileName}&description={$this->description}";
+        return "/upload?filename=" . urlencode($this->fileName) . "&description=" . urlencode($this->description);
     }
 
     /**
