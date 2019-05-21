@@ -14,6 +14,8 @@ abstract class AbstractRequest
 
     public $requestData = [];
 
+    public $requestHeaders = [];
+
     /**
      * @var ApiClient
      */
@@ -36,6 +38,6 @@ abstract class AbstractRequest
      */
     public function request()
     {
-        return $this->apiClient->request($this->getHttpMethod(), $this->getHttpPath(), $this->requestData);
+        return $this->apiClient->request($this->getHttpMethod(), $this->getHttpPath(), $this->requestData, $this->requestHeaders);
     }
 }
