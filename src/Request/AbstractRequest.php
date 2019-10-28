@@ -16,6 +16,8 @@ abstract class AbstractRequest
 
     public $requestHeaders = [];
 
+    public $dataToLogging = ['method','data','rawResponse','responseInfo'];
+
     /**
      * @var ApiClient
      */
@@ -38,6 +40,6 @@ abstract class AbstractRequest
      */
     public function request()
     {
-        return $this->apiClient->request($this->getHttpMethod(), $this->getHttpPath(), $this->requestData, $this->requestHeaders);
+        return $this->apiClient->request($this->getHttpMethod(), $this->getHttpPath(), $this->requestData, $this->requestHeaders, $this->dataToLogging);
     }
 }

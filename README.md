@@ -41,10 +41,10 @@ try {
 
 ```php
 $metaDataRequest = (new FileGetRequest($apiClient))
-    ->fileName("mqsyarul/hello.txt")
+    ->fileName("mqsyarul/hello.txt");
 
 try {
-    $fileMetaData = $metaDataRequest
+    $fileMetaData = $metaDataRequest->request();
 } catch (ApiErrorException $e) {
     // Ошибка от API
 } catch (ServerErrorException $e) {

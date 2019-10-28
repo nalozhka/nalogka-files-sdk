@@ -47,7 +47,7 @@ class ApiClient
      * @throws NalogkaSdkException
      * @throws ServerErrorException
      */
-    public function request($method, $path, $data = [], $headers = [])
+    public function request($method, $path, $data = [], $headers = [], $dataToLogging = ['method', 'data', 'rawResponse', 'responseInfo'])
     {
         $method = strtoupper($method);
 
@@ -98,13 +98,31 @@ class ApiClient
 
         $responseInfo = curl_getinfo($ch);
 
-        if ($this->logger instanceof LoggerInterface){
-            $this->logger->debug("Метод: {method} \n Данные запроса: {data} \n Ответ сервера: {rawResponse} \n Данные ответа: {responseInfo}", [
-                'method' => $method,
-                'data' => $data,
-                'rawResponse' => $rawResponse,
-                'responseInfo' => $responseInfo
-            ]);
+        if ($this->logger instanceof LoggerInterface) {
+            $debugFormatString = '';
+            $debugData = [];
+
+            if (in_array('method', $dataToLogging)) {
+                $debugFormatString .= "Метод: {method} \n";
+            }
+
+            if (in_array('data', $dataToLogging)) {
+                $debugFormatString .= "Данные запроса: {data} \n";
+            }
+
+            if (in_array('rawResponse', $dataToLogging)) {
+                $debugFormatString .= "Ответ сервера: {rawResponse} \n";
+            }
+
+            if (in_array('responseInfo', $dataToLogging)) {
+                $debugFormatString .= "Данные ответа: {responseInfo} \n";
+            }
+
+            $debugData = compact($dataToLogging);
+
+            if ($debugFormatString && $debugData) {
+                 $this->logger->debug($debugFormatString, $debugData);
+            }
         }
 
         if (!$rawResponse && $this->isErrorResponse($responseInfo['http_code'])) {

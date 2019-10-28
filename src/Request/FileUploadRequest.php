@@ -10,6 +10,8 @@ class FileUploadRequest extends AbstractRequest
     private $fileName;
     private $description;
 
+    public $dataToLogging = ['method', 'rawResponse', 'responseInfo'];
+
     public function fileName($fileName = '')
     {
         $this->fileName = $fileName;
