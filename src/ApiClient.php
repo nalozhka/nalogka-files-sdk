@@ -91,7 +91,9 @@ class ApiClient
         foreach ($headers as $headerName => $headerValue) {
             $curlReadyHeaders[] = "{$headerName}: {$headerValue}";
         }
-
+        
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $curlReadyHeaders);
 
         $rawResponse = curl_exec($ch);
