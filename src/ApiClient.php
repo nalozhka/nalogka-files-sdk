@@ -95,11 +95,13 @@ class ApiClient
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $curlReadyHeaders);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         $rawResponse = curl_exec($ch);
 
         $responseInfo = curl_getinfo($ch);
 
+        $dataToLogging[] = 'curlError';
         if ($this->logger instanceof LoggerInterface) {
             $debugFormatString = '';
             $debugData = [];
@@ -120,6 +122,11 @@ class ApiClient
                 $debugFormatString .= "Данные ответа: {responseInfo} \n";
             }
 
+            if (in_array('curlError', $dataToLogging)) {
+                $curlError = curl_error($ch);
+                $debugFormatString .= "Ошибка CURL: {curlError} \n";
+            }
+            
             $debugData = compact($dataToLogging);
 
             if ($debugFormatString && $debugData) {
