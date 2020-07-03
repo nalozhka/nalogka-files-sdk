@@ -93,7 +93,7 @@ class ApiClient
         }
         
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+        curl_setopt($ch, CURLOPT_POSTREDIR, 7);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $curlReadyHeaders);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
